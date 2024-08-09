@@ -3,16 +3,23 @@ package main
 import (
 	"fmt"
 
-	"github.com/Catfish1210/arctis9bat/core"
+	"github.com/Catfish1210/arctis9bat/arctis9"
 )
 
 func main() {
-	fmt.Println("connected devices to system USB buses:")
-	lsusbData, err := core.RunLSUSB()
-	if err != nil {
-		fmt.Printf("Error running lsusb: %v", err)
+	Arctis9 := arctis9.Arctis9
+	Arctis9.Init()
+	if Arctis9.Error != nil {
+		fmt.Printf("error: %v\n", Arctis9.Error)
 		return
 	}
-	fmt.Println(lsusbData)
-
+	Arctis9.GetBattery()
+	if Arctis9.Error != nil {
+		fmt.Printf("error: %v\n", Arctis9.Error)
+		return
+	}
+	fmt.Println("------------------------------------")
+	fmt.Printf("Battery Status: [%v]\n", Arctis9.Battery.Status)
+	fmt.Printf("Battery  Level:        [%v]\n", Arctis9.Battery.Level)
+	fmt.Println("------------------------------------")
 }
